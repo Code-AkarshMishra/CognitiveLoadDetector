@@ -1,0 +1,37 @@
+# ==============================================================================
+# NeuroTrack AI - Project Requirements & Setup Guide
+# ==============================================================================
+# 
+# This package contains the Next.js Frontend for NeuroTrack AI.
+# It integrates seamlessly with an external Java Spring Boot backend.
+#
+# ------------------------------------------------------------------------------
+# 1. FRONTEND NODE.JS DEPENDENCIES (Node.js >= 18.0.0)
+# ------------------------------------------------------------------------------
+# Installed automatically by running `npm install` in this directory.
+#
+# Primary Dependencies (from package.json):
+#   - next >= 16.0.0 (Framework)
+#   - react >= 19.0.0 & react-dom >= 19.0.0
+#   - axios >= 1.18.0 (HTTP API Client)
+#   - framer-motion >= 12.40.0 (Animations)
+#   - recharts >= 3.8.1 (Data Visualization Charts)
+#   - lucide-react >= 1.21.0 & react-icons >= 5.6.0 (Icons)
+#   - react-hook-form >= 7.80.0 (Form Management)
+#   - sonner >= 2.0.7 (Toast Notifications)
+#   - jspdf >= 4.2.1 (PDF Export)
+#   - tailwindcss >= 4.0.0 (Styling)
+
+# ------------------------------------------------------------------------------
+# 2. BACKEND CONNECTION CONFIGURATION
+# ------------------------------------------------------------------------------
+# The frontend sends 5 Hz continuous interaction frames to the backend at:
+# Default: http://localhost:8080
+# 
+# To change the backend port or host, create a `.env.local` file with:
+# NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
+#
+# For full REST API endpoint specifications, request formats, and response JSON
+# schemas for the Java Spring Boot backend developer, refer to:
+# BACKEND_API_SPECIFICATION.md
+# ==============================================================================

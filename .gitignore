@@ -1,0 +1,48 @@
+# Node.js & Next.js
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+build/
+frontend/build/
+.vercel/
+
+# Java Spring Boot & Maven
+target/
+Backend/target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+
+# Python ML & Virtualenvs
+__pycache__/
+ml/**/__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Local Sessions & Logs
+.sessions/
+sessions/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment & OS
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db
+.vscode/
