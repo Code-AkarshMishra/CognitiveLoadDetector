@@ -3,13 +3,13 @@
 <div align="center">
 
 ![NeuroTrack Architecture](https://img.shields.io/badge/Architecture-3--Tier%20Multimodal-06b6d4?style=for-the-badge)
-![Next.js 16](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019-black?style=for-the-badge&logo=next.js)
+![Frontend JavaScript](https://img.shields.io/badge/Frontend-Pure%20JavaScript%20(ES6%2B)%20%7C%20React.js-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Java Spring Boot](https://img.shields.io/badge/Backend-Java%20Spring%20Boot-6db33f?style=for-the-badge&logo=springboot)
 ![Python Flask ML](https://img.shields.io/badge/ML%20Engine-Python%20%7C%20OpenCV%20%7C%20Scikit--Learn-3776ab?style=for-the-badge&logo=python)
 ![Privacy Safe](https://img.shields.io/badge/Privacy-100%25%20Ephemeral%20(Zero%20Video%20Stored)-10b981?style=for-the-badge)
 
 <p align="center">
-  <b>An end-to-end multimodal cognitive ergonomics platform that measures real-time mental workload, interaction strain, and physical fatigue using continuous behavioural keystroke/mouse dynamics and 15-second privacy-preserving OpenCV facial vision scans.</b>
+  <b>An end-to-end multimodal cognitive ergonomics platform that measures real-time mental workload, interaction strain, and physical fatigue using continuous behavioural keystroke/mouse dynamics and 15-second privacy-preserving OpenCV facial vision scans. Built with 100% Pure JavaScript (React.js frontend), Java Spring Boot backend, and Python ML engine.</b>
 </p>
 
 </div>
@@ -40,8 +40,8 @@ NeuroTrack operates as a **3-Tier Synchronous Distributed System**:
 ```mermaid
 flowchart TB
     subgraph ClientLayer ["Client & Sensor Layer (:3000)"]
-        UI["🖥️ Next.js 16 Executive Dashboard"]
-        Ext["🧩 Chrome Background Extension"]
+        UI["🖥️ Pure JavaScript (React.js) Executive Dashboard"]
+        Ext["🧩 JavaScript Chrome Background Extension"]
         Cam["👁️ 15s Ephemeral OpenCV Vision Stream"]
         Keys["⌨️ Keystroke Latency & Error Detector"]
         Mouse["🖱️ Cursor Velocity & Idle Tracker"]
@@ -86,10 +86,10 @@ The sequence below illustrates the live 2-second streaming loop that computes Co
 sequenceDiagram
     autonumber
     actor User as 👤 Operator
-    participant Front as 🖥️ Next.js Dashboard
-    participant Ext as 🧩 Browser Extension
-    participant Back as ☕ Spring Boot (:8080)
-    participant ML as 🐍 Flask ML Engine (:5001)
+    participant Front as 🖥️ JavaScript (React.js) Dashboard
+    participant Ext as 🧩 JavaScript Extension
+    participant Back as ☕ Java Spring Boot (:8080)
+    participant ML as 🐍 Python Flask ML Engine (:5001)
 
     User->>Front: Clicks "Start Live Session" (Dev/Student Mode)
     Front->>Ext: window.postMessage("start-session")
@@ -122,19 +122,19 @@ sequenceDiagram
 ## 📂 Component Breakdown
 
 ### 1. Frontend (`frontend/`)
-- **Framework**: Next.js 16.2.9 (App Router) + React 19.
+- **Language & Stack**: 100% Pure JavaScript (ES6+) + React.js / Next.js runtime.
 - **Styling**: Vanilla CSS custom design tokens + Tailwind CSS with full dynamic Light/Dark contrast adaptability.
 - **Visuals & Charts**:
   - `LiveScoreGauge.js`: Dual high-precision circular SVG meters for Cognitive Load Index (`/100`) and Productivity Flow (`%`).
   - `DashboardCharts.js`: Real-time Recharts Area timeline with gradient multi-stream tracking.
   - `LiveWebcamPreview.js`: 15-second ephemeral smart vision HUD with auto-shutoff timer.
 - **Hooks**:
-  - `useKeyboardTracker.js`: Measures WPM, backspace correction stress, and inter-key variance (single-event precision).
-  - `useMouseTracker.js`: Tracks Euclidean cursor distance, velocity, and micro-idle states.
+  - `useKeyboardTracker.js`: Pure JavaScript event listener measuring WPM, backspace correction stress, and inter-key variance (single-event precision).
+  - `useMouseTracker.js`: Pure JavaScript event listener tracking Euclidean cursor distance, velocity, and micro-idle states.
   - `useWebcamTracker.js`: Manages 15-second hardware triggers with automated auto-off safety.
 
 ### 2. Backend API Gateway (`Backend/`)
-- **Framework**: Java 21 / 17 + Spring Boot 3.4.3.
+- **Language & Stack**: Java 21 / 17 + Spring Boot 3.4.3.
 - **Core Controller**: `CognitiveLoadController.java`
   - Endpoints:
     - `POST /api/cognitive-load`: Validates incoming frontend telemetry and proxies to Python ML engine using `RestTemplate`.
