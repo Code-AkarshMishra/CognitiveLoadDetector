@@ -35,23 +35,10 @@ import {
 } from "recharts";
 
 export default function OrgDashboardPage() {
-  const [currentUser, setCurrentUser] = useState(() => {
-    if (typeof window === "undefined") return null;
-    const stored = window.localStorage.getItem("neurotrack_user");
-    return stored ? JSON.parse(stored) : null;
-  });
-
-  const [realSessions, setRealSessions] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("neurotrack_sessions");
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  const [allUsers, setAllUsers] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("neurotrack_user");
-    return stored ? [JSON.parse(stored)] : [];
-  });
+  const [isMounted, setIsMounted] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [realSessions, setRealSessions] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
   // Current Organization
   const currentOrgName = currentUser?.organization || "Independent Team";
@@ -93,7 +80,25 @@ export default function OrgDashboardPage() {
     ];
   }, [orgSessions]);
 
-  // Fetch live backend organization data if available
+  // Read local storage and fetch live backend organization data if available
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const storedUser = window.localStorage.getItem("neurotrack_user");
+      if (storedUser) {
+        const u = JSON.parse(storedUser);
+        setCurrentUser(u);
+        setAllUsers([u]);
+      }
+      const storedSessions = window.localStorage.getItem("neurotrack_sessions");
+      if (storedSessions) {
+        setRealSessions(JSON.parse(storedSessions));
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
   useEffect(() => {
     const fetchOrgData = async () => {
       try {
@@ -270,11 +275,11 @@ export default function OrgDashboardPage() {
         </div>
 
         {/* Charts Section */}
-        {orgSessions.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {isMounted && orgSessions.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-w-0">
             
             {/* Session Trajectory Bar Chart (8 Cols) */}
-            <div className="lg:col-span-8 p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-4">
+            <div className="lg:col-span-8 p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-4 min-w-0">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-bold text-base text-[var(--foreground)]">Real Cognitive Load by Session</h3>
@@ -283,8 +288,8 @@ export default function OrgDashboardPage() {
                 <span className="text-xs font-mono text-cyan-600 dark:text-cyan-400">Verified ML Scoring</span>
               </div>
 
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-64 w-full min-w-0">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={200}>
                   <BarChart data={orgSessions.slice(-10)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="opacity-10" />
                     <XAxis dataKey="role" stroke="#64748b" tick={{ fontSize: 11 }} />
@@ -305,14 +310,14 @@ export default function OrgDashboardPage() {
             </div>
 
             {/* Fatigue Distribution Donut (4 Cols) */}
-            <div className="lg:col-span-4 p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-4 flex flex-col justify-between">
+            <div className="lg:col-span-4 p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-4 flex flex-col justify-between min-w-0">
               <div>
                 <h3 className="font-bold text-base text-[var(--foreground)]">Strain Distribution</h3>
                 <p className="text-xs text-[var(--text-secondary)]">Measured fatigue categorization</p>
               </div>
 
-              <div className="h-44 w-full flex items-center justify-center">
-                <ResponsiveContainer width="100%" height="100%">
+              <div className="h-44 w-full flex items-center justify-center min-w-0">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={150}>
                   <PieChart>
                     <Pie
                       data={fatigueBreakdown}

@@ -2,20 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { 
-  Activity, 
-  ShieldCheck, 
-  Cpu, 
-  Server, 
-  CheckCircle2, 
-  AlertTriangle, 
-  XCircle, 
-  RefreshCw, 
-  Database, 
-  Terminal, 
-  Users, 
-  Layers, 
-  Zap, 
+import {
+  Activity,
+  ShieldCheck,
+  Cpu,
+  Server,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  RefreshCw,
+  Database,
+  Terminal,
+  Users,
+  Layers,
+  Zap,
   Eye,
   TrendingUp,
   Download,
@@ -33,21 +33,11 @@ export default function AdminDashboardPage() {
   const [logFilter, setLogFilter] = useState("ALL");
   const [backendMeta, setBackendMeta] = useState(null);
 
-  // Real Sessions & Users (Zero Dummy Data)
-  const [activeSessions, setActiveSessions] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("neurotrack_sessions");
-    return stored ? JSON.parse(stored) : [];
-  });
-
-  const [registeredUsers, setRegisteredUsers] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("neurotrack_user");
-    return stored ? [JSON.parse(stored)] : [];
-  });
-
+  // Real Sessions & Users (Hydration Safe - loaded on mount)
+  const [activeSessions, setActiveSessions] = useState([]);
+  const [registeredUsers, setRegisteredUsers] = useState([]);
   const [systemLogs, setSystemLogs] = useState([
-    { id: 1, time: new Date().toLocaleTimeString(), type: "SYSTEM", message: "Admin Observability Cluster ready. Awaiting telemetry streams." }
+    { id: 1, time: "--:--:--", type: "SYSTEM", message: "Admin Observability Cluster ready. Awaiting telemetry streams." }
   ]);
 
   const checkHealth = async () => {
@@ -104,6 +94,19 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
+    try {
+      const storedSessions = window.localStorage.getItem("neurotrack_sessions");
+      if (storedSessions) setActiveSessions(JSON.parse(storedSessions));
+      const storedUser = window.localStorage.getItem("neurotrack_user");
+      if (storedUser) setRegisteredUsers([JSON.parse(storedUser)]);
+    } catch {
+      // ignore
+    }
+
+    setSystemLogs([
+      { id: 1, time: new Date().toLocaleTimeString(), type: "SYSTEM", message: "Admin Observability Cluster ready. Awaiting telemetry streams." }
+    ]);
+
     checkHealth();
     const interval = setInterval(checkHealth, 12000);
     return () => clearInterval(interval);
@@ -138,7 +141,7 @@ export default function AdminDashboardPage() {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-        
+
         {/* Header Hero */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl">
           <div className="flex items-center gap-4">
@@ -170,7 +173,7 @@ export default function AdminDashboardPage() {
 
         {/* 3 Infrastructure Node Status Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          
+
           {/* Node 1: Next.js Web Application */}
           <div className="p-5 rounded-3xl bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-3">
             <div className="flex items-center justify-between">
@@ -268,13 +271,12 @@ export default function AdminDashboardPage() {
                       <td className="p-3 font-medium">{s.wordsPerMinute || 0} WPM</td>
                       <td className="p-3 text-[var(--text-secondary)]">{s.durationFormatted || `${s.durationSeconds || 0}s`}</td>
                       <td className="p-3">
-                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                          s.fatigueRisk === "High" 
-                            ? "bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30" 
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${s.fatigueRisk === "High"
+                            ? "bg-rose-500/20 text-rose-600 dark:text-rose-300 border border-rose-500/30"
                             : s.fatigueRisk === "Moderate"
-                            ? "bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30"
-                            : "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30"
-                        }`}>
+                              ? "bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/30"
+                              : "bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30"
+                          }`}>
                           {s.fatigueRisk || "Completed"}
                         </span>
                       </td>
@@ -310,9 +312,8 @@ export default function AdminDashboardPage() {
                 <button
                   key={tab}
                   onClick={() => setLogFilter(tab)}
-                  className={`px-2.5 py-1 rounded-lg font-semibold transition ${
-                    logFilter === tab ? "bg-indigo-600 text-white" : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
-                  }`}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition ${logFilter === tab ? "bg-indigo-600 text-white" : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
+                    }`}
                 >
                   {tab}
                 </button>
@@ -324,13 +325,12 @@ export default function AdminDashboardPage() {
             {filteredLogs.map((log) => (
               <div key={log.id} className="flex items-start gap-2.5">
                 <span className="text-slate-500 select-none">[{log.time}]</span>
-                <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
-                  log.type === "ML_INFERENCE" 
+                <span className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${log.type === "ML_INFERENCE"
                     ? "bg-purple-500/20 text-purple-300"
                     : log.type === "SYSTEM"
-                    ? "bg-cyan-500/20 text-cyan-300"
-                    : "bg-emerald-500/20 text-emerald-300"
-                }`}>
+                      ? "bg-cyan-500/20 text-cyan-300"
+                      : "bg-emerald-500/20 text-emerald-300"
+                  }`}>
                   {log.type}
                 </span>
                 <span className="text-slate-200">{log.message}</span>

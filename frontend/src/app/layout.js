@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -20,10 +21,13 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        <script
+        <Script
+          id="unregister-sw"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {

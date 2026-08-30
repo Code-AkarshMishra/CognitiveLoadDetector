@@ -99,23 +99,26 @@ export default function DashboardPage() {
   const [liveRecommendations, setLiveRecommendations] = useState([]);
   const [lastProxyService, setLastProxyService] = useState(null);
 
-  // Current logged in user from localStorage
-  const [currentUser, setCurrentUser] = useState(() => {
-    if (typeof window === "undefined") return null;
-    const stored = window.localStorage.getItem("neurotrack_user");
-    return stored ? JSON.parse(stored) : null;
-  });
+  // Current logged in user from localStorage (Hydration safe)
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Session state & History
   const [sessionStartAt, setSessionStartAt] = useState(null);
   const [sessionEndAt, setSessionEndAt] = useState(null);
   const [lastSessionSummary, setLastSessionSummary] = useState(null);
   const [chartTimeline, setChartTimeline] = useState([]);
-  const [sessionHistory, setSessionHistory] = useState(() => {
-    if (typeof window === "undefined") return [];
-    const stored = window.localStorage.getItem("neurotrack_sessions");
-    return stored ? JSON.parse(stored) : [];
-  });
+  const [sessionHistory, setSessionHistory] = useState([]);
+
+  useEffect(() => {
+    try {
+      const storedUser = window.localStorage.getItem("neurotrack_user");
+      if (storedUser) setCurrentUser(JSON.parse(storedUser));
+      const storedSessions = window.localStorage.getItem("neurotrack_sessions");
+      if (storedSessions) setSessionHistory(JSON.parse(storedSessions));
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const keyboardMetrics = useKeyboardTracker(sessionActive);
   const mouseMetrics = useMouseTracker(sessionActive);
@@ -645,9 +648,9 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="h-56 w-full">
+            <div className="h-56 w-full min-w-0">
               {sessionActive && chartTimeline.length > 1 ? (
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={180}>
                   <AreaChart data={chartTimeline} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">

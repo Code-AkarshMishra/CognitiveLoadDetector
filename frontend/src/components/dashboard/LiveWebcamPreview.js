@@ -19,9 +19,14 @@ export default function LiveWebcamPreview({
   useEffect(() => {
     if (videoRef.current && stream) {
       videoRef.current.srcObject = stream;
-      videoRef.current.play().catch((e) => {
-        console.warn("Video playback auto-start:", e);
-      });
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((e) => {
+          if (e.name !== "AbortError" && e.name !== "NotAllowedError") {
+            console.warn("Video playback auto-start:", e);
+          }
+        });
+      }
     } else if (videoRef.current && !stream) {
       videoRef.current.srcObject = null;
     }

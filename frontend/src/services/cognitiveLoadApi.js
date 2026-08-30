@@ -106,8 +106,8 @@ export const cognitiveLoadApi = {
           "Local model processed session metrics successfully."
         ],
         recommendations: [
-          fatigueRisk === "High" || fatigueRisk === "Critical" 
-            ? "Consider taking a 5-minute break." 
+          fatigueRisk === "High" || fatigueRisk === "Critical"
+            ? "Consider taking a 5-minute break."
             : "Focus state optimal. Continue current task rhythm."
         ],
         isFallback: true
