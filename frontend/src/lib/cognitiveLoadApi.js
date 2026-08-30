@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BACKEND_API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080/api';
+const BACKEND_API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080').replace(/\/$/, '') + '/api';
 
 /**
  * Sends cognitive load telemetry or image frame to the Spring Boot backend service,
