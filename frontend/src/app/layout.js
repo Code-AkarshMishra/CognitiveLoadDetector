@@ -15,6 +15,11 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Mental Fatigue Analyser",
   description: "Team SyntaxSquad",
+  icons: {
+    icon: "/tab.png",
+    shortcut: "/tab.png",
+    apple: "/tab.png",
+  },
 };
 
 export default function RootLayout({ children }) {
